@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { v4 as randomUUID } from "uuid";
 import { faker } from "@faker-js/faker";
 class Post {
   private _id: string;

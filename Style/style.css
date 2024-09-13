@@ -1,0 +1,61 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Roboto", sans-serif;
+  }
+  
+  .post-container {
+    border: 1px solid #d394ea;
+    width: 400px;
+    height: 450px;
+    margin-top: 20px;
+    margin-left: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .post-img {
+    flex: 1;
+    width: 376px;
+    height: 200px;
+  }
+  
+  .post-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .post-header > div > img {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #d394ea;
+    border-radius: 50px;
+    object-fit: cover;
+  }
+  
+  .post-icons {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+  }
+  .post-icons > div {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+  }
+  
+  .liked {
+    color: #e63e68;
+  }

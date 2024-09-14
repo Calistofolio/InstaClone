@@ -1,5 +1,5 @@
 import { v4 as randomUUID } from "uuid";
-import { faker } from "@faker-js/faker";
+import { faker, th } from "@faker-js/faker";
 class Post {
   private _id: string;
   private _avatarUrl: string;
@@ -62,21 +62,36 @@ class Post {
     return this._numberOfLikes;
   }
 
-  like() {
-    this._isLiked = !this._isLiked;
-    const iconLike = document.getElementById("btnLike");
+  like() { 
+    const postContainer = document.getElementById(this._id);
+    const button = postContainer?.querySelector("#btn-like");
+    const iconLike = button?.children[0];
+    const likes = postContainer?.querySelector(".like-count")
+
+
+    if(!iconLike) return;
 
     if (this._isLiked) {
-      this._numberOfLikes += 1;
+      iconLike?.classList.remove("fa-heart");
+      iconLike?.classList.remove("liked");
+      iconLike?.classList.add("fa-heart-o");
 
-
+      this._numberOfLikes -=1;
     } else {
-      this._numberOfLikes -= 1;
-    }
-    console.log(this._isLiked);
+      iconLike?.classList.remove("fa-heart-o");
+      iconLike?.classList.add("fa-heart");
+      iconLike?.classList.add("liked");
 
-    const postContainer = document.getElementById(this._id);
-    const btnLike = postContainer?.querySelector("#btnLike");
+      this._numberOfLikes +=1;
+    }
+
+    if(this._numberOfLikes == 1){
+      likes!.innerHTML = String(`${this._numberOfLikes} like`)
+      }else{
+        likes!.innerHTML = String(`${this._numberOfLikes} likes`)
+      }
+
+    this._isLiked = !this._isLiked;
   }
 
   toHtml() {
@@ -98,10 +113,11 @@ class Post {
         </div>`
 
     const postIcons = `<div class="post-icons">
+        <div>
           <div id="btn-like" onclick="like()">
             <i class="fa fa-heart-o"></i>
           </div>
-
+         
           <div>
             <i class="fa fa-comment-o"></i>
           </div>
@@ -109,15 +125,26 @@ class Post {
           <div>
             <i class="fa fa-paper-plane-o"></i>
           </div>
-
+        </div>
           <div>
             <i class="fa fa-bookmark-o"></i>
           </div>
         </div>`
 
+        const postText = ` <div class="informations"> 
+          <div class="like-count">
+            <span>${this._numberOfLikes}</span> likes </div>
+          <div> 
+            <p class="description"> oii</p>
+          </div>
+          </div>`
+
     postContainer.innerHTML = postHeader;
     postContainer.innerHTML += postImg;
     postContainer.innerHTML += postIcons;
+    postContainer.innerHTML += postText;
+
+   
 
     const btnLike = postContainer.querySelector("#btn-like");
     btnLike?.addEventListener("click", () => this.like());

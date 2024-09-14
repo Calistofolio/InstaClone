@@ -59,3 +59,7 @@
   .liked {
     color: #e63e68;
   }
+
+  .informations *{
+    padding: 2px;
+  }

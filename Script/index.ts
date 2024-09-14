@@ -4,6 +4,7 @@ class Post {
   private _id: string;
   private _avatarUrl: string;
   private _isLiked: boolean = false;
+  private _isSaved: boolean = false;
   private _description: string;
   private _userName: string;
   private _createdAt: Date;
@@ -20,6 +21,7 @@ class Post {
     this._userName = userName;
     this._imgUrl = imgUrl;
     this._isLiked;
+    this._isSaved;
     this._createdAt = new Date();
     this._numberOfLikes = 0;
     this._avatarUrl = avatarUrl;
@@ -64,34 +66,62 @@ class Post {
 
   like() { 
     const postContainer = document.getElementById(this._id);
-    const button = postContainer?.querySelector("#btn-like");
-    const iconLike = button?.children[0];
-    const likes = postContainer?.querySelector(".like-count")
 
+    if(!postContainer) return;
 
-    if(!iconLike) return;
-
-    if (this._isLiked) {
-      iconLike?.classList.remove("fa-heart");
-      iconLike?.classList.remove("liked");
-      iconLike?.classList.add("fa-heart-o");
-
-      this._numberOfLikes -=1;
-    } else {
-      iconLike?.classList.remove("fa-heart-o");
-      iconLike?.classList.add("fa-heart");
-      iconLike?.classList.add("liked");
-
-      this._numberOfLikes +=1;
-    }
-
-    if(this._numberOfLikes == 1){
-      likes!.innerHTML = String(`${this._numberOfLikes} like`)
-      }else{
-        likes!.innerHTML = String(`${this._numberOfLikes} likes`)
-      }
+    this.updateLikeCount(postContainer);
+    this.updateLikeIcon(postContainer); 
 
     this._isLiked = !this._isLiked;
+  }
+
+  updateLikeIcon(postHtml: HTMLElement){
+    const postLikeButton = postHtml.querySelector("#btn-like");
+    const postLikeIcon = postLikeButton?.children[0];
+
+    if (!postLikeIcon) return;
+
+    postLikeIcon.classList.toggle("fa-heart")
+    postLikeIcon.classList.toggle("liked")
+    postLikeIcon.classList.toggle("heartbeat")
+    postLikeIcon.classList.toggle("fa-heart-o")
+    postLikeButton.classList.toggle("scale-in-center")
+  }
+
+  updateLikeCount(postHtml: HTMLElement){
+    const postLikes = postHtml.querySelector(".like-count");
+    const span = postLikes?.querySelector("span");
+
+    if (!span) return;
+
+    if(this._isLiked){
+      this._numberOfLikes -= 1;
+      }else{
+        this._numberOfLikes += 1;
+      }
+
+      span.textContent = this._numberOfLikes.toString();
+  }
+
+  savePost(){
+    const postContainer = document.getElementById(this._id);
+
+    if(!postContainer) return;
+
+    this.updateBookmarkIcon(postContainer);
+
+    this._isSaved = !this._isSaved;
+  }
+
+  updateBookmarkIcon(postHtml: HTMLElement){
+   const bookmarkButton = postHtml.querySelector("#btn-save");
+   const bookmarkIcon = bookmarkButton?.children[0]
+
+   if (!bookmarkIcon) return;
+
+    bookmarkIcon.classList.toggle("fa-bookmark-o");
+    bookmarkIcon.classList.toggle("swing-in-top-fwd");
+    bookmarkIcon.classList.toggle("fa-bookmark");
   }
 
   toHtml() {
@@ -126,7 +156,7 @@ class Post {
             <i class="fa fa-paper-plane-o"></i>
           </div>
         </div>
-          <div>
+          <div id="btn-save" onclick="savePost()">
             <i class="fa fa-bookmark-o"></i>
           </div>
         </div>`
@@ -135,7 +165,7 @@ class Post {
           <div class="like-count">
             <span>${this._numberOfLikes}</span> likes </div>
           <div> 
-            <p class="description"> oii</p>
+            <span>${this._description}</span>
           </div>
           </div>`
 
@@ -148,6 +178,8 @@ class Post {
 
     const btnLike = postContainer.querySelector("#btn-like");
     btnLike?.addEventListener("click", () => this.like());
+    const btnSave = postContainer.querySelector("#btn-save");
+    btnSave?.addEventListener("click", () => this.savePost())
 
     document.body.appendChild(postContainer);
   }
